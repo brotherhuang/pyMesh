@@ -47,12 +47,11 @@ class triMesh:
             for i in range(len(self.normals)):
                 self.normals[i] = self.normals[i] / LA.norm(self.normals[i])
     def need_neighbors(self):
-        for v in self.vertices:
-            self.neighbors.append([])
+        self.neighbors = [[] for x in xrange(len(self.vertices))]
         for f in self.faces:
-            v0 = self.vertices[f[0]]
-            v1 = self.vertices[f[1]]
-            v2 = self.vertices[f[2]]
+            v0 = f[0]
+            v1 = f[1]
+            v2 = f[2]
             if self.neighbors[v0].count(v1) == 0: self.neighbors[v0].append(v1)
             if self.neighbors[v0].count(v2) == 0: self.neighbors[v0].append(v2)
             if self.neighbors[v1].count(v0) == 0: self.neighbors[v1].append(v0)
@@ -60,12 +59,11 @@ class triMesh:
             if self.neighbors[v2].count(v0) == 0: self.neighbors[v2].append(v0)
             if self.neighbors[v2].count(v1) == 0: self.neighbors[v2].append(v1)
     def need_adjacentfaces(self):
-        for v in self.vertices:
-            self.adjacentfaces.append([])
-        for i in range(self.faces):
-            v0 = self.vertices[self.faces[i][0]]
-            v1 = self.vertices[self.faces[i][1]]
-            v2 = self.vertices[self.faces[i][2]]
+        self.adjacentfaces = [[] for x in xrange(len(self.vertices))]
+        for i in range(len(self.faces)):
+            v0 = self.faces[i][0]
+            v1 = self.faces[i][1]
+            v2 = self.faces[i][2]
             self.adjacentfaces[v0].append(i)
             self.adjacentfaces[v1].append(i)
             self.adjacentfaces[v2].append(i)
