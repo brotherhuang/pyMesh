@@ -1,5 +1,6 @@
 import sys
 import readline
+import numpy as np
 def readOFF(fileName):
     file = open(fileName.strip(), 'rt')
     if 'OFF' != file.readline().strip():
@@ -9,7 +10,7 @@ def readOFF(fileName):
     nFaces = int(firstLine[1])
     verts = []
     for iVert in range(nVerts):
-        verts.append([float(s) for s in file.readline().strip().split(' ')])
+        verts.append(np.asarray([float(s) for s in file.readline().strip().split(' ')]))
     faces = []
     for iFace in range(nFaces):
         faces.append([int(float(s)) for s in file.readline().strip().split(' ')][1:])
@@ -37,10 +38,10 @@ def readOBJ(fileName):
         if not values: continue
         if values[0] == 'v':
             v = map(float, values[1:4])
-            verts.append(v)
+            verts.append(np.asarray(v))
         elif values[0] == 'vn':
             n = map(float,values[1:4])
-            normals.append(n)
+            normals.append(np.asarray(n))
         elif values[0] == 'vt': continue
         elif values[0] in ('usemtl', 'usemat'): continue
         elif values[0] == 'mtllib': continue
