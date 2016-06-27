@@ -36,8 +36,8 @@ def readOBJ(fileName):
             n = []
             for v in values[1:]:
                 w = v.split('/')
-                f.append(int(w[0]))
-            faces.append(f);
+                f.append(int(w[0]) - 1)
+            faces.append(f)
     return verts, faces,normals
 
 class triMesh:
@@ -50,6 +50,7 @@ class triMesh:
         elif fileName[-3:] == 'obj':
             [self.vertices, self.faces,self.normals] = readOBJ(fileName)
         else : print("current not support the " + fileName[-3:] + " format")
+
 
 
 
