@@ -25,6 +25,11 @@ class triMesh:
         v1 = self.vertices[self.faces[f][1]]
         v2 = self.vertices[self.faces[f][2]]
         return (v0 + v1 + v2)/3.0
+    def trinorm(self,f):
+        v0 = self.vertices[self.faces[f][0]]
+        v1 = self.vertices[self.faces[f][1]]
+        v2 = self.vertices[self.faces[f][2]]
+        return 0.5 * np.cross(v1-v0, v2-v0)
     def need_normals(self):
         if len(self.normals) == 0:
             for v in self.vertices:
@@ -67,7 +72,6 @@ class triMesh:
             self.adjacentfaces[v0].append(i)
             self.adjacentfaces[v1].append(i)
             self.adjacentfaces[v2].append(i)
-        return 0
 
 
 
