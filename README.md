@@ -1,12 +1,11 @@
 # pyMesh
 a python based framework for geometry processing 
 
-# TODO
 ## meshIO 
-### support for ply
+support for ply
 
 ## meshAlgorithm
-### make it consistent with triMesh lib
+make it consistent with triMesh lib
 
 ## meshUI
-### add basic mesh rendering and mesh interaction
+add basic mesh rendering and mesh interaction
