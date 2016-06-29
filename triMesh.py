@@ -106,6 +106,7 @@ class triMesh:
         v1 = self.vertices[self.faces[f][(v + 1) % 3]]
         v2 = self.vertices[self.faces[f][(v + 2) % 3]]
         return math.acos(np.dot(v1 - v0), (v2 - v0))
+    
 
 
 
