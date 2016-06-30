@@ -12,11 +12,11 @@ class triMesh:
         self.adjacentfaces =[]
         self.across_edge = []
         if fileName != None:
-           if fileName[-3:] == 'off':
-	      [self.vertices,self.faces] = readOFF(fileName)
-	   elif fileName[-3:] == 'obj':
-	        [self.vertices, self.faces,self.normals] = readOBJ(fileName)
-	   else : print("current not support the " + fileName[-3:] + " format")           
+            if fileName[-3:] == 'off':
+                [self.vertices,self.faces] = readOFF(fileName)
+            elif fileName[-3:] == 'obj':
+                [self.vertices, self.faces,self.normals] = readOBJ(fileName)
+            else : print("current not support the " + fileName[-3:] + " format")
     
     def read(self,fileName):
         if fileName[-3:] == 'off':

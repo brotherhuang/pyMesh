@@ -1,5 +1,6 @@
 import sys
 from triMesh import *
+from meshUI import *
 mesh0 = triMesh('car061_low.obj')
 mesh0.need_normals()
 mesh0.need_neighbors()
