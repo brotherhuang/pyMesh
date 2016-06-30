@@ -15,8 +15,11 @@ def draw():
     for f in mesh0.faces:
         glBegin(GL_TRIANGLES)
         glColor3f(0.6,0.6,0.6)
+        glNormal3f(mesh0.normals[f[0]][0], mesh0.normals[f[0]][1], mesh0.normals[f[0]][2])
         glVertex3f(mesh0.vertices[f[0]][0], mesh0.vertices[f[0]][1], mesh0.vertices[f[0]][2])
+        glNormal3f(mesh0.normals[f[0]][0], mesh0.normals[f[0]][1], mesh0.normals[f[0]][2])
         glVertex3f(mesh0.vertices[f[1]][0], mesh0.vertices[f[1]][1], mesh0.vertices[f[1]][2])
+        glNormal3f(mesh0.normals[f[0]][0], mesh0.normals[f[0]][1], mesh0.normals[f[0]][2])
         glVertex3f(mesh0.vertices[f[2]][0], mesh0.vertices[f[2]][1], mesh0.vertices[f[2]][2])
         glEnd()
     glPopMatrix()
@@ -77,6 +80,7 @@ def drawBackground():
 
 def main(argv):
     mesh0.read(argv[0])
+    mesh0.need_normals()
     glutInit(['triMesh'])
     glutInitWindowPosition(112, 84)
     glutInitWindowSize(800, 600)
