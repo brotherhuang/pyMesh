@@ -8,8 +8,8 @@ from math import *
 from random import random, choice, randint, getrandbits
 M_PI   = pi
 M_PI_2 = pi / 2.0
+mesh0 = triMesh()
 def draw():
-    mesh0 = triMesh('281.obj')
     glDisable(GL_DEPTH_TEST)
     glShadeModel(GL_SMOOTH)
     # paint planes
@@ -28,8 +28,8 @@ def draw():
     glutSwapBuffers()
     return
 
-
-if __name__ == "__main__":
+def main(argv):
+        mesh0.read(argv[0])
 	glutInit(['triMesh'])
 	glutInitWindowPosition(112, 84)
 	glutInitWindowSize(800, 600)
@@ -69,6 +69,11 @@ if __name__ == "__main__":
 	# start event processing */
 	#print 'RIGHT-CLICK to display the menu.'
 	glutMainLoop()
+
+
+if __name__ == "__main__":
+   main(sys.argv[1:])
+
 
 
 

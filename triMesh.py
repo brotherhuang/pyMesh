@@ -4,18 +4,27 @@ import math
 from numpy import linalg as LA
 from meshIO import*
 class triMesh:
-    def __init__(self, fileName):
+    def __init__(self, fileName = None):
         self.vertices = []
         self.normals = []
         self.faces = []
         self.neighbors = []
         self.adjacentfaces =[]
         self.across_edge = []
+        if fileName != None:
+           if fileName[-3:] == 'off':
+	      [self.vertices,self.faces] = readOFF(fileName)
+	   elif fileName[-3:] == 'obj':
+	        [self.vertices, self.faces,self.normals] = readOBJ(fileName)
+	   else : print("current not support the " + fileName[-3:] + " format")           
+    
+    def read(self,fileName):
         if fileName[-3:] == 'off':
             [self.vertices,self.faces] = readOFF(fileName)
         elif fileName[-3:] == 'obj':
             [self.vertices, self.faces,self.normals] = readOBJ(fileName)
         else : print("current not support the " + fileName[-3:] + " format")
+        
     def write(self,fileName):
         if fileName[-3:] == 'off':
             writeOFF(fileName,self.vertices, self.faces)
