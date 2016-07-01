@@ -17,9 +17,9 @@ def draw():
         glColor3f(0.6,0.6,0.6)
         glNormal3f(mesh0.normals[f[0]][0], mesh0.normals[f[0]][1], mesh0.normals[f[0]][2])
         glVertex3f(mesh0.vertices[f[0]][0], mesh0.vertices[f[0]][1], mesh0.vertices[f[0]][2])
-        glNormal3f(mesh0.normals[f[0]][0], mesh0.normals[f[0]][1], mesh0.normals[f[0]][2])
+        glNormal3f(mesh0.normals[f[1]][0], mesh0.normals[f[1]][1], mesh0.normals[f[1]][2])
         glVertex3f(mesh0.vertices[f[1]][0], mesh0.vertices[f[1]][1], mesh0.vertices[f[1]][2])
-        glNormal3f(mesh0.normals[f[0]][0], mesh0.normals[f[0]][1], mesh0.normals[f[0]][2])
+        glNormal3f(mesh0.normals[f[2]][0], mesh0.normals[f[2]][1], mesh0.normals[f[2]][2])
         glVertex3f(mesh0.vertices[f[2]][0], mesh0.vertices[f[2]][1], mesh0.vertices[f[2]][2])
         glEnd()
     glPopMatrix()
@@ -45,7 +45,7 @@ def setDefaultLight():
 def setDefaultMaterial():
     mat_diffuse = [0.5, 0.5, 0.5, 1.0]
     mat_specular = [0.5, 0.5, 0.5, 1.0]
-    mat_shininess = [128.0]
+    mat_shininess = [0.0]
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, mat_diffuse)
 
 def drawBackground():
