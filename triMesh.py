@@ -11,6 +11,8 @@ class triMesh:
         self.neighbors = []
         self.adjacentfaces =[]
         self.across_edge = []
+        self.edges = []
+        self.edges_faces = []
         if fileName != None:
             if fileName[-3:] == 'off':
                 [self.vertices,self.faces] = readOFF(fileName)
@@ -67,6 +69,39 @@ class triMesh:
                 if self.neighbors[v1].count(v2) == 0: self.neighbors[v1].append(v2)
                 if self.neighbors[v2].count(v0) == 0: self.neighbors[v2].append(v0)
                 if self.neighbors[v2].count(v1) == 0: self.neighbors[v2].append(v1)
+
+    def need_edges(self):
+        for f in self.faces:
+            v0 = f[0]
+            v1 = f[1]
+            v2 = f[2]
+            e0 = [v0,v1]
+            if v0 > v1 : e0 = [v1,v0]
+            e1 = [v0,v2]
+            if v0 > v2 : e1 = [v2,v0]
+            e2 = [v1,v2]
+            if v1 > v2 : e2 = [v2,v1]
+            if self.edges.count(e0) == 0: self.edges.append(e0)
+            if self.edges.count(e1) == 0: self.edges.append(e1)
+            if self.edges.count(e2) == 0: self.edges.append(e2)
+
+    def need_edge_face(self):
+        if len(self.edges) == 0 : self.need_edges()
+        if len(self.edges_faces) == 0:
+            self.edges_faces = [[] for x in xrange(len(self.edges))]
+        for i in range(len(self.faces)):
+            v0 = self.faces[i][0]
+            v1 = self.faces[i][1]
+            v2 = self.faces[i][2]
+            e0 = [v0, v1]
+            if v0 > v1: e0 = [v1, v0]
+            e1 = [v0, v2]
+            if v0 > v2: e1 = [v2, v0]
+            e2 = [v1, v2]
+            if v1 > v2: e2 = [v2, v1]
+            self.edges_faces[self.edges.index(e0)].append(i)
+            self.edges_faces[self.edges.index(e1)].append(i)
+            self.edges_faces[self.edges.index(e2)].append(i)
 
     def need_adjacentfaces(self):
         if len(self.adjacentfaces) == 0 :
