@@ -45,9 +45,9 @@ class triMesh:
                 a = v0 - v1
                 b = v1 - v2
                 c = v2 - v0
-                la = LA.norm(a)
-                lb = LA.norm(b)
-                lc = LA.norm(c)
+                la = LA.norm(a)**2
+                lb = LA.norm(b)**2
+                lc = LA.norm(c)**2
                 if  la == 0 or lb == 0 or lc == 0 : continue
                 facenormal = np.cross(a, b)
                 self.normals[f[0]] += facenormal * (1.0 / (la * lc))
