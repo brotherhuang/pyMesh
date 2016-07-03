@@ -3,6 +3,7 @@ a python based framework for geometry processing
 
 ## dependences
 [numpy](http://www.numpy.org/)
+
 [PyOpenGL](http://pyopengl.sourceforge.net/) for user Interface
 
 ## meshIO
@@ -19,7 +20,7 @@ make it consistent with triMesh lib
 basic mesh rendering
 
 ```
-python triMesh.py modelName
+python triMeshUI.py modelName
 ```
 
 need add more mesh interaction
