@@ -14,8 +14,8 @@ make it consistent with triMesh lib
 ## meshUI
 basic mesh rendering 
 
-'''
+```
 python meshUI.py modelName
-'''
+```
 
 need add more mesh interaction
