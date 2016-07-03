@@ -13,6 +13,8 @@ class triMesh:
         self.across_edge = []
         self.edges = []
         self.edges_faces = []
+        self.bbox_max = []
+        self.bbox_min = []
         if fileName != None:
             if fileName[-3:] == 'off':
                 [self.vertices,self.faces] = readOFF(fileName)
@@ -150,6 +152,23 @@ class triMesh:
         v1 = self.vertices[self.faces[f][(v + 1) % 3]]
         v2 = self.vertices[self.faces[f][(v + 2) % 3]]
         return math.acos(np.dot(v1 - v0), (v2 - v0))
+
+    def need_bbox(self):
+        self.bbox_min = self.vertices[0]
+        self.bbox_max = self.vertices[0]
+        for v in self.vertices:
+            self.bbox_min = np.minimum(self.bbox_min, v)
+            self.bbox_max = np.maximum(self.bbox_min, v)
+
+    def unifyModel(self):
+        self.need_bbox()
+        center = (self.bbox_min + self.bbox_max) * 0.5
+        length = LA.norm(self.bbox_min + self.bbox_max)
+        for i in range(len(self.vertices)):
+            self.vertices[i] = (self.vertices[i] - center) * 2.0 / length
+
+
+
     
 
 

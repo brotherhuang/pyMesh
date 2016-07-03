@@ -27,8 +27,77 @@ g_ArcBall = ArcBallT (640, 480)
 g_isDragging = False
 g_quadratic = None
 ESCAPE = '\033'
-
+window = 0
 mesh0 = triMesh()
+
+
+def InitGL(Width, Height):				# We call this right after our OpenGL window is created.
+
+	glShadeModel(GL_SMOOTH)				# Enables Smooth Color Shading
+	glClearColor(0.0, 0.0, 0.0, 0.5)	# This Will Clear The Background Color To Black
+	glClearDepth(1.0)					# Enables Clearing Of The Depth Buffer
+	glEnable(GL_DEPTH_TEST)				# Enables Depth Testing
+	glDepthFunc(GL_LEQUAL)				# The Type Of Depth Test To Do
+	glHint (GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST) # Really Nice Perspective Calculations
+
+
+
+	return True									# // Initialization Went OK
+
+
+# Reshape The Window When It's Moved Or Resized
+def ReSizeGLScene(Width, Height):
+	if Height == 0:						# Prevent A Divide By Zero If The Window Is Too Small
+		Height = 1
+
+	glViewport(0, 0, Width, Height)		# Reset The Current Viewport And Perspective Transformation
+	glMatrixMode(GL_PROJECTION)			# // Select The Projection Matrix
+	glLoadIdentity()					# // Reset The Projection Matrix
+	# // field of view, aspect ratio, near and far
+	# This will squash and stretch our objects as the window is resized.
+	# Note that the near clip plane is 1 (hither) and the far plane is 1000 (yon)
+	gluPerspective(45.0, float(Width)/float(Height), 1, 100.0)
+
+	glMatrixMode (GL_MODELVIEW);		# // Select The Modelview Matrix
+	glLoadIdentity ();					# // Reset The Modelview Matrix
+	g_ArcBall.setBounds (Width, Height)	# //*NEW* Update mouse bounds for arcball
+	return
+
+
+# The function called whenever a key is pressed. Note the use of Python tuples to pass in: (key, x, y)
+def keyPressed(*args):
+	global g_quadratic
+	# If escape is pressed, kill everything.
+	key = args [0]
+	if key == ESCAPE:
+		gluDeleteQuadric (g_quadratic)
+		sys.exit ()
+
+def Initialize (Width, Height):				# We call this right after our OpenGL window is created.
+	global g_quadratic
+
+	glClearColor(0.0, 0.0, 0.0, 1.0)					# This Will Clear The Background Color To Black
+	glClearDepth(1.0)									# Enables Clearing Of The Depth Buffer
+	glDepthFunc(GL_LEQUAL)								# The Type Of Depth Test To Do
+	glEnable(GL_DEPTH_TEST)								# Enables Depth Testing
+	glShadeModel (GL_FLAT);								# Select Flat Shading (Nice Definition Of Objects)
+	glHint (GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST) 	# Really Nice Perspective Calculations
+
+	g_quadratic = gluNewQuadric();
+	gluQuadricNormals(g_quadratic, GLU_SMOOTH);
+	gluQuadricDrawStyle(g_quadratic, GLU_FILL);
+	# Why? this tutorial never maps any textures?! ?
+	# gluQuadricTexture(g_quadratic, GL_TRUE);			# // Create Texture Coords
+
+	glEnable (GL_LIGHT0)
+	glEnable (GL_LIGHTING)
+
+	glEnable (GL_COLOR_MATERIAL)
+
+	return True
+
+
+
 
 def Upon_Drag (cursor_x, cursor_y):
 	""" Mouse cursor is moving
@@ -73,122 +142,55 @@ def Upon_Click (button, button_state, cursor_x, cursor_y):
 
 
 
-def keyPressed(*args):
-	global g_quadratic
-	# If escape is pressed, kill everything.
-	key = args [0]
-	if key == ESCAPE:
-		gluDeleteQuadric (g_quadratic)
-		sys.exit ()
+def drawMesh():
+	for f in mesh0.faces:
+		glBegin(GL_TRIANGLES)
+		glNormal3f(mesh0.normals[f[0]][0], mesh0.normals[f[0]][1], mesh0.normals[f[0]][2])
+		glVertex3f(mesh0.vertices[f[0]][0], mesh0.vertices[f[0]][1], mesh0.vertices[f[0]][2])
+		glNormal3f(mesh0.normals[f[1]][0], mesh0.normals[f[1]][1], mesh0.normals[f[1]][2])
+		glVertex3f(mesh0.vertices[f[1]][0], mesh0.vertices[f[1]][1], mesh0.vertices[f[1]][2])
+		glNormal3f(mesh0.normals[f[2]][0], mesh0.normals[f[2]][1], mesh0.normals[f[2]][2])
+		glVertex3f(mesh0.vertices[f[2]][0], mesh0.vertices[f[2]][1], mesh0.vertices[f[2]][2])
+		glEnd()
+	return
 
-
-def draw():
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-    glMatrixMode(GL_MODELVIEW)
-    glLoadIdentity()
-    glMultMatrixf(g_Transform);
-    glPushMatrix()
-    for f in mesh0.faces:
-        glBegin(GL_TRIANGLES)
-        glColor3f(0.6,0.6,0.6)
-        glNormal3f(mesh0.normals[f[0]][0], mesh0.normals[f[0]][1], mesh0.normals[f[0]][2])
-        glVertex3f(mesh0.vertices[f[0]][0], mesh0.vertices[f[0]][1], mesh0.vertices[f[0]][2])
-        glNormal3f(mesh0.normals[f[1]][0], mesh0.normals[f[1]][1], mesh0.normals[f[1]][2])
-        glVertex3f(mesh0.vertices[f[1]][0], mesh0.vertices[f[1]][1], mesh0.vertices[f[1]][2])
-        glNormal3f(mesh0.normals[f[2]][0], mesh0.normals[f[2]][1], mesh0.normals[f[2]][2])
-        glVertex3f(mesh0.vertices[f[2]][0], mesh0.vertices[f[2]][1], mesh0.vertices[f[2]][2])
-        glEnd()
-    glPopMatrix()
-    glEnable(GL_LIGHTING);
-    glFlush();
-    glutSwapBuffers()
-    return
-
-def setDefaultLight():
-    pos0 = [-3.0, 3.0, 3.0, 0.0]
-    col0 = [1.0,  1.0,  1.0, 1.0]
-    pos1 = [3.0,  3.0,  3.0, 0.0]
-    col1 = [1.0,  1.0,  1.0, 1.0]
-    glLightfv(GL_LIGHT0, GL_POSITION, pos0)
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, col0)
-    glLightfv(GL_LIGHT0, GL_SPECULAR, col0)
-    glEnable(GL_LIGHT0)
-    glLightfv(GL_LIGHT1, GL_POSITION, pos1)
-    glLightfv(GL_LIGHT1, GL_DIFFUSE, col1)
-    glLightfv(GL_LIGHT1, GL_SPECULAR, col1)
-    glEnable(GL_LIGHT1)
-    glEnable(GL_LIGHTING)
-
-def setDefaultMaterial():
-    mat_diffuse = [0.5, 0.5, 0.5, 1.0]
-    mat_specular = [0.5, 0.5, 0.5, 1.0]
-    mat_shininess = [0.0]
-    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, mat_diffuse)
-
-def drawBackground():
-    glMatrixMode(GL_PROJECTION)
-    glPushMatrix()
-    glLoadIdentity()
-    glOrtho(-1, 1, -1, 1, -1, 1)
-    glMatrixMode(GL_MODELVIEW)
-    glPushMatrix()
-    glLoadIdentity()
-    glPushAttrib(GL_ENABLE_BIT)
-    glDisable(GL_DEPTH_TEST)
-    glDisable(GL_LIGHTING)
-    glDisable(GL_TEXTURE_2D)
-
-    glBegin(GL_TRIANGLE_STRIP)
-    glColor3f(1.0, 1.0, 1.0)
-    glVertex2f(-1, 1)
-    glColor3f(1.0, 1.0, 1.0)
-    glVertex2f(-1, -1)
-    glColor3f(1.0, 1.0, 1.0)
-    glVertex2f(1, 1)
-    glColor3f(1.0, 1.0, 1.0)
-    glVertex2f(1, -1)
-    glEnd()
-
-    glPopAttrib()
-    glPopMatrix()
-    glMatrixMode(GL_PROJECTION)
-    glPopMatrix()
-    glMatrixMode(GL_MODELVIEW)
+def Draw ():
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
+	glTranslatef(-1.5, 0.0, -5.0);
+	glPushMatrix();
+	glMultMatrixf(g_Transform);
+	glColor3f(0.75,0.75,1.0)
+	drawMesh()
+	glPopMatrix();
+	glFlush ();
+	glutSwapBuffers()
+	return
 
 def main(argv):
-    global g_quadratic
-    g_quadratic = gluNewQuadric()
-    gluQuadricNormals(g_quadratic, GLU_SMOOTH)
-    gluQuadricDrawStyle(g_quadratic, GLU_FILL)
-    mesh0.read(argv[0])
-    mesh0.need_normals()
-    glutInit(['triMesh'])
-    glutInitWindowPosition(112, 84)
-    glutInitWindowSize(640, 480)
-    # use multisampling if available
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_MULTISAMPLE)
-    wintitle = "triMesh"
-    glutCreateWindow(wintitle)
-    glutDisplayFunc(draw)
-    glutIdleFunc(draw)
-    #glutKeyboardFunc(keyboard)
-    #  setup OpenGL state
-    glClearDepth(1.0)
-    glClearColor(0.5,0.5, 0.5, 0.0)
-    glShadeModel(GL_SMOOTH)
-    setDefaultLight()
-    setDefaultMaterial()
-    glEnable(GL_DEPTH_TEST)
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-    glEnable(GL_BLEND)
-    glutKeyboardFunc(keyPressed)
-    glutMouseFunc(Upon_Click)
-    glutMotionFunc(Upon_Drag)
-    drawBackground()
-    glutMainLoop()
+	global window
+	glutInit(sys.argv)
+	mesh0.read(argv[0])
+	mesh0.unifyModel()
+	mesh0.need_normals()
+	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH)
+	glutInitWindowSize(640, 480)
+	glutInitWindowPosition(0, 0)
+	window = glutCreateWindow("Lesson 48: NeHe ArcBall Rotation Tutorial")
+	glutDisplayFunc(Draw)
+	glutIdleFunc(Draw)
+	glutReshapeFunc(ReSizeGLScene)
+	glutKeyboardFunc(keyPressed)
+	glutMouseFunc(Upon_Click)
+	glutMotionFunc(Upon_Drag)
+	Initialize(640, 480)
+	glutMainLoop()
 
+
+# Print message to console, and kick off the main to get it rolling.
 if __name__ == "__main__":
-   main(sys.argv[1:])
+    print "Hit ESC key to quit."
+    main(sys.argv[1:])
 
 
 
