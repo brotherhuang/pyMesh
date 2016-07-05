@@ -14,12 +14,12 @@ def umbrella(mesh,stepSize, tangent):
     mesh.need_adjacentfaces()
     if tangent == True:
         mesh.need_normals()
-    disp = [np.array[0.0,0.0,0.0] * len(mesh.vertices)]
+    disp = [np.array([0.0, 0.0,0.0]) for x in xrange(len(mesh.vertices))]
     for i in range(len(mesh.vertices)):
         if mesh.is_bdy(i) : continue
-        nn = len(mesh.neighbor[i])
+        nn = len(mesh.neighbors[i])
         for j in range(nn):
-            disp[i] += mesh.vertices[mesh.neighbor[i][j]]
+            disp[i] += mesh.vertices[mesh.neighbors[i][j]]
         disp[i] /= nn
         disp[i] -= mesh.vertices[i]
     if tangent == True:
@@ -33,8 +33,8 @@ def lmsmooth(mesh, iterations):
     mesh.need_neighbors()
     mesh.need_adjacentfaces()
     for i in range(iterations):
-        umbrella(mesh,0.330)
-        umbrella(mesh,-0.331)
+        umbrella(mesh,0.330, False)
+        umbrella(mesh,-0.331,False)
 
 def remove_vertices(mesh, toremove):
     return
