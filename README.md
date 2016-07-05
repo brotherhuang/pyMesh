@@ -6,10 +6,16 @@ a python based framework for geometry processing
 
 [PyOpenGL](http://pyopengl.sourceforge.net/) for user Interface
 
-## meshIO
-support obj and off read and write
+[plyfile](https://github.com/dranjan/python-plyfile) need for plyfile read
 
-need support for ply
+```
+pip install PyOpenGL PyOpenGL_accelerate
+pip install plyfile
+
+```
+
+## meshIO
+support obj, off, ply files read and write
 
 ## meshAlgorithm
 
