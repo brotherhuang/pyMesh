@@ -12,7 +12,6 @@ support obj and off read and write
 need support for ply
 
 ## meshAlgorithm
-support the connectivity functions
 
 make it consistent with triMesh lib
 
