@@ -11,7 +11,6 @@ a python based framework for geometry processing
 ```
 pip install PyOpenGL PyOpenGL_accelerate
 pip install plyfile
-
 ```
 
 ## meshIO
