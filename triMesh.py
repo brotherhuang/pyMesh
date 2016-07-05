@@ -16,17 +16,22 @@ class triMesh:
         self.bbox_max = []
         self.bbox_min = []
         if fileName != None:
-            if fileName[-3:] == 'off':
-                [self.vertices,self.faces] = readOFF(fileName)
-            elif fileName[-3:] == 'obj':
-                [self.vertices, self.faces,self.normals] = readOBJ(fileName)
-            else : print("current not support the " + fileName[-3:] + " format")
+            self.read(fileName)
+            # if fileName[-3:] == 'off':
+            #     [self.vertices,self.faces] = readOFF(fileName)
+            # elif fileName[-3:] == 'obj':
+            #     [self.vertices, self.faces,self.normals] = readOBJ(fileName)
+            # elif fileName[-3:] == 'ply':
+            #     [self.vertices, self.faces, self.normals] = readPLY(fileName)
+            # else : print("current not support the " + fileName[-3:] + " format")
     
     def read(self,fileName):
         if fileName[-3:] == 'off':
             [self.vertices,self.faces] = readOFF(fileName)
         elif fileName[-3:] == 'obj':
             [self.vertices, self.faces,self.normals] = readOBJ(fileName)
+        elif fileName[-3:] == 'ply':
+            [self.vertices, self.faces,self.normals] = readPLY(fileName)
         else : print("current not support the " + fileName[-3:] + " format")
         
     def write(self,fileName):
@@ -34,6 +39,8 @@ class triMesh:
             writeOFF(fileName,self.vertices, self.faces)
         elif fileName[-3:] == 'obj':
             writeOBJ(fileName,self.vertices,self.faces,self.normals)
+        elif fileName[-3:] == 'ply':
+            writePLY(fileName,self.vertices,self.faces,self.normals)
         else: print("current not support the " + fileName[-3:] + " format")
 
     def need_normals(self):

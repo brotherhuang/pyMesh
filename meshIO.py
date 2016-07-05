@@ -2,6 +2,49 @@
 import sys
 import readline
 import numpy as np
+from plyfile import (PlyData, PlyElement, make2d, PlyParseError, PlyProperty)
+
+def readPLY(fileName):
+    plydata = PlyData.read(fileName)
+    verts = []
+    faces = []
+    for ele in plydata.elements:
+        if ele.name == 'vertex':
+            for v in plydata['vertex']:
+                if len(v) == 3:
+                    verts.append(np.asarray([v[0], v[1], v[2]]))
+                else:
+                    verts.append(np.asarray([v[0][0], v[0][1], v[0][2]]))
+        if ele.name == 'face':
+            for f in plydata['face']:
+                if len(f) == 3:
+                    faces.append(np.asarray([f[0], f[1], f[2]]))
+                else:
+                    faces.append(np.asarray([f[0][0], f[0][1], f[0][2]]))
+    normals = []
+    return verts, faces,normals
+
+def writePLY(fileName,verts,faces = [],normals = [], color = []):
+    with open(fileName, 'w') as f:
+        f.write("ply\n")
+        f.write("format ascii 1.0\n")
+        f.write("element vertex  " + str(len(verts)) + "\n")
+        f.write("property float x\n")
+        f.write("property float y\n")
+        f.write("property float z\n")
+        f.write("element face  " + str(len(faces)) + "\n")
+        f.write("property list uchar int vertex_indices\n")
+        f.write("end_header\n")
+        for v in verts:
+            for i in v:
+                f.write("%.4f " % i)
+            f.write("\n")
+        for p in faces:
+            f.write(str(len(p)))
+            for i in p:
+                f.write(" %d" %  i)
+            f.write("\n")
+
 def readOFF(fileName):
     file = open(fileName.strip(), 'rt')
     if 'OFF' != file.readline().strip():
@@ -55,8 +98,8 @@ def readOBJ(fileName):
             faces.append(f)
     return verts, faces,normals
 
-def writeOBJ(fineName,verts,faces,normals):
-    with open(fineName, 'w') as f:
+def writeOBJ(fileName,verts,faces,normals):
+    with open(fileName, 'w') as f:
         f.write("# OBJ file\n")
         for v in verts:
             f.write("v ")
