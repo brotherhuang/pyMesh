@@ -18,7 +18,7 @@ support obj, off, ply files read and write
 
 ## meshAlgorithm
 
-make it consistent with triMesh lib
+make it consistent with [triMesh2 lib](http://gfx.cs.princeton.edu/proj/trimesh2/)
 
 ## meshUI
 basic mesh rendering
